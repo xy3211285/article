@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mantou.article.dao.UserInfoDao">
+    <insert id="insertUserInfo">
+        INSERT INTO user_info (
+            `user_id`,
+            `name`,
+            `level`,
+            `dept`,
+            `offer`,
+            `address`,
+            `tel`,
+            `info`,
+            `image_url`
+        ) VALUES (
+            #{userId},
+            #{name},
+            #{level},
+            #{dept},
+            #{offer},
+            #{address},
+            #{tel},
+            #{info},
+            #{imageUrl}
+        )
+    </insert>
+
+    <select id="getUserInfoByUserIds" resultType="com.mantou.article.bean.UserInfo">
+        SELECT
+        `id`,
+        `user_id` AS userId,
+        `name`,
+        `level`,
+        `dept`,
+        `offer`,
+        `address`,
+        `tel`,
+        `info`,
+        `image_url` AS imageUrl
+        FROM user_info
+        WHERE 1=1
+        <if test="list != null">
+            AND user_id IN (
+            <foreach collection="list" item="item" separator=",">
+                #{item}
+            </foreach>
+        )
+        </if>
+    </select>
+
+    <update id="updateUserInfo" parameterType="com.mantou.article.bean.UserInfo">
+        UPDATE user_info
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="name != null">
+                `name` = #{name},
+            </if>
+            <if test="level != null">
+                level = #{level},
+            </if>
+            <if test="dept != null">
+                dept = #{dept},
+            </if>
+            <if test="offer != null">
+                offer = #{offer},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="tel != null">
+                tel = #{tel},
+            </if>
+            <if test="info != null">
+                info = #{info},
+            </if>
+            <if test="imageUrl != null">
+                image_url = #{imageUrl}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteUserInfo">
+        DELETE FROM user_info
+        WHERE id IN (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
+
+    <insert id="insertCompanyInfo" parameterType="com.mantou.article.bean.CompanyInfo">
+        Replace INTO t_company_info (
+        company_introduction,
+        `name`,
+        company_number
+        ) VALUES (
+        #{companyIntroduction},
+        #{name},
+        #{companyNumber}
+        )
+    </insert>
+
+    <select id="getcompanyInfoByNumber" resultType="com.mantou.article.bean.CompanyInfo">
+        SELECT
+        company_introduction AS companyIntroduction,
+        `name`,
+        company_number AS companyNumber
+        FROM t_company_info
+        WHERE company_number=#{number}
+        LIMIT 1
+    </select>
+
+    <insert id="saveImagePath">
+        INSERT t_image (
+        image_path
+        ) VALUES (
+        #{path}
+        )
+    </insert>
+
+    <insert id="saveFieldInfo" parameterType="com.mantou.article.bean.FieldInfo">
+        INSERT INTO t_field_info (
+        field,
+        detail,
+        image_path
+        ) VALUES (
+        #{field},
+        #{detail},
+        #{imagePath}
+        )
+    </insert>
+
+    <select id="getFieldInfo" resultType="com.mantou.article.bean.FieldInfo">
+        SELECT
+        id,
+        field,
+        detail,
+        image_path AS  imagePath
+        FROM t_field_info
+    </select>
+
+    <update id="updateFieldInfo" parameterType="com.mantou.article.bean.FieldInfo">
+        UPDATE t_field_info
+        <set>
+            <if test="field != null">
+                field = #{field},
+            </if>
+            <if test="detail != null">
+                detail = #{detail},
+            </if>
+            <if test="imagePath != null">
+                image_path = #{imagePath}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteFieldInfoByIds">
+        DELETE FROM t_field_info
+        WHERE  id IN (
+        <foreach collection="list" separator="," item="item">
+            #{item}
+        </foreach>
+        )
+    </delete>
+
+    <insert id="saveSuccessfulCase" parameterType="com.mantou.article.bean.SuccessfulCase">
+        INSERT INTO t_successful_case (
+        owner,
+        success_position
+        ) VALUES (
+        #{owner},
+        #{successPosition}
+        )
+    </insert>
+
+    <select id="getSuccessfulCase" resultType="com.mantou.article.bean.SuccessfulCase">
+        SELECT
+        id,
+        owner,
+        success_position AS successPosition
+        FROM t_successful_case
+    </select>
+
+    <update id="updateSuccessfulCase" parameterType="com.mantou.article.bean.SuccessfulCase">
+        UPDATE t_successful_case
+        <set>
+            <if test="owner != null">
+                owner=#{owner},
+            </if>
+            <if test="successPosition != null">
+                success_position=#{successPosition}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteSuccessfulCaseByIds">
+        DELETE FROM t_successful_case
+        WHERE id IN (
+        <foreach collection="list" item="item" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
+</mapper>

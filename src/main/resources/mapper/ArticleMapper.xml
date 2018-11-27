@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mantou.article.dao.ArticleDao">
+    <insert id="addArticle" parameterType="com.mantou.article.bean.Article">
+        INSERT INTO article (
+        category,
+        title,
+        content,
+        author,
+        create_time
+        ) VALUES (
+        #{category},
+        #{title},
+        #{content},
+        #{author},
+        now()
+        )
+    </insert>
+
+    <select id="getArticleById" parameterType="java.lang.Long" resultType="com.mantou.article.bean.Article">
+        SELECT
+        category,
+        title,
+        content,
+        author,
+        create_time
+        FROM article
+        WHERE id=#{id}
+    </select>
+
+    <select id="getArticleByCategory" resultType="com.mantou.article.bean.Article">
+        SELECT
+        id,
+        category,
+        title,
+        content,
+        author,
+        create_time
+        FROM article
+        <where>
+            <if test="category != null">
+                AND category=#{category}
+            </if>
+            <if test="title != null">
+                AND title=#{title}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <update id="updateArticle" parameterType="com.mantou.article.bean.Article">
+        UPDATE article
+        SET
+        <if test="category != null">
+            category=#{category},
+        </if>
+        <if test="title != null">
+            title=#{title},
+        </if>
+        <if test="content != null">
+            content=#{content},
+        </if>
+        <if test="author != null">
+            author=#{author}
+        </if>
+        WHERE
+        category=#{category} AND title=#{title}
+    </update>
+</mapper>
